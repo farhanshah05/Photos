@@ -23,7 +23,7 @@ public class Superuser implements Serializable {
 	 * Also takes care of user persistence
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String storeDir = "dat";
+	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
 	
 	/**
