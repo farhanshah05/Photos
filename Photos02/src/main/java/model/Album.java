@@ -10,180 +10,79 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 /**
+ * Represents an Album that users can add pictures to.
  *
- * Album class that users can add pictures too
  * @author Farhan Shah
- *
  */
-public class Album implements Serializable{
-
+public class Album implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
 
-	/**
-	 * Name of the album
-	 */
 	public String albumName;
-
-	/**
-	 * List of photos stored in the current albums
-	 */
 	public ArrayList<Photo> photoslist;
-
-	/**
-	 * Number of photos in a album
-	 */
 	public int photoCount = 0;
-
-	/**
-	 * Current photo in the album
-	 */
 	public Photo currentPhoto;
 
 	/**
-	 * Constructor for Album
-	 * @param albumName
+	 * Constructor for creating an Album.
+	 *
+	 * @param albumName The name of the album.
 	 */
 	public Album(String albumName) {
 		this.albumName = albumName;
 		photoslist = new ArrayList<Photo>();
 	}
 
-	/**
-	 * Comparator for sorting alphabetically
-	 */
-	public static Comparator<Album> sortByAZ = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			return a1.albumName.compareTo(a2.albumName);
+	// Comparators for sorting albums
+	public static Comparator<Album> sortByAZ = Comparator.comparing(album -> album.albumName);
+	public static Comparator<Album> sortByZA = (a1, a2) -> a2.albumName.compareTo(a1.albumName);
+	public static Comparator<Album> sortByIP = Comparator.comparingInt(album -> album.photoCount);
+	public static Comparator<Album> sortByDP = (a1, a2) -> Integer.compare(a2.photoCount, a1.photoCount);
+	public static Comparator<Album> sortByID = (a1, a2) -> compareDates(a1, a2, false);
+	public static Comparator<Album> sortByDD = (a1, a2) -> compareDates(a1, a2, true);
+
+	// Method to compare dates for sorting
+	private static int compareDates(Album a1, Album a2, boolean reverse) {
+		Date date1 = findDate(a1, reverse);
+		Date date2 = findDate(a2, reverse);
+
+		if (date1 != null && date2 != null) {
+			return reverse ? date2.compareTo(date1) : date1.compareTo(date2);
+		} else if (date1 == null && date2 != null) {
+			return reverse ? -1 : 1;
+		} else if (date1 != null && date2 == null) {
+			return reverse ? 1 : -1;
 		}
-	};
+		return 0;
+	}
 
-	/**
-	 * Comparator for sorting alphabetically (reverse)
-	 */
-	public static Comparator<Album> sortByZA = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			return a1.albumName.compareTo(a2.albumName)*-1;
-		}
-	};
-
-	/**
-	 * Comparator for sorting by size of albums - increasing
-	 */
-	public static Comparator<Album> sortByIP = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			int num1 = a1.photoCount;
-			int num2 = a2.photoCount;
-
-			if (num1 > num2) return -1;
-			if (num2 > num1) return 1;
-			return 0;
-		}
-	};
-
-	/**
-	 * Comparator for sorting by size of albums - decreasing
-	 */
-	public static Comparator<Album> sortByDP = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			int num1 = a1.photoCount;
-			int num2 = a2.photoCount;
-
-			if (num1 > num2) return 1;
-			if (num2 > num1) return -1;
-			return 0;
-		}
-	};
-
-	/**
-	 * Comparator for sorting by image by date added
-	 */
-	public static Comparator<Album> sortByID = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			Date date1 = null;
-			if (!a1.photoslist.isEmpty()) {
-				date1 = a1.getPhotos().get(0).date;
-				for (Photo photo: a1.photoslist) {
-					if (photo.date.before(date1)) {
-						date1 = photo.date;
-					}
+	// Helper method to find the extreme date for sorting
+	private static Date findDate(Album album, boolean reverse) {
+		Date date = null;
+		if (!album.photoslist.isEmpty()) {
+			date = album.getPhotos().get(0).date;
+			for (Photo photo : album.photoslist) {
+				if ((reverse && photo.date.after(date)) || (!reverse && photo.date.before(date))) {
+					date = photo.date;
 				}
 			}
-
-			Date date2 = null;
-			if (!a2.photoslist.isEmpty()) {
-				date2 = a2.getPhotos().get(0).date;
-				for (Photo photo: a2.photoslist) {
-					if (photo.date.before(date2)) {
-						date2 = photo.date;
-					}
-				}
-			}
-
-			if (date1 != null && date2 != null) {
-				if (date1.before(date2)) return 1;
-				if (date2.before(date1)) return -1;
-			} else if (date1 == null && date2 !=null) {
-				return 1;
-			} else if (date1 != null && date2 == null) {
-				return -1;
-			}
-
-			return 0;
 		}
-	};
+		return date;
+	}
 
 	/**
-	 * Comparator for sorting by image by date added - reversed
-	 */
-	public static Comparator<Album> sortByDD = new Comparator<Album>() {
-		public int compare(Album a1, Album a2) {
-			Date date1 = null;
-			if (!a1.photoslist.isEmpty()) {
-				date1 = a1.getPhotos().get(0).date;
-				for (Photo photo: a1.photoslist) {
-					if (photo.date.after(date1)) {
-						date1 = photo.date;
-					}
-				}
-			}
-
-			Date date2 = null;
-			if (!a2.photoslist.isEmpty()) {
-				date2 = a2.getPhotos().get(0).date;
-				for (Photo photo: a2.photoslist) {
-					if (photo.date.after(date2)) {
-						date2 = photo.date;
-					}
-				}
-			}
-
-			if (date1 != null && date2 != null) {
-				if (date1.before(date2)) return 1;
-				if (date2.before(date1)) return -1;
-			} else if (date1 == null && date2 !=null) {
-				return 1;
-			} else if (date1 != null && date2 == null) {
-				return -1;
-			}
-
-			return 0;
-		}
-	};
-
-	/**
-	 * Checks if a photo exists in an album
-	 * @param fp
-	 * @return true if it exists, false if not
+	 * Checks if a photo exists in the album.
+	 *
+	 * @param fp The file path of the photo.
+	 * @return true if the photo exists, false otherwise.
 	 */
 	public boolean exists(String fp) {
 		if (photoslist.size() > 0 && !fp.isEmpty()) {
-			for(Photo photos : photoslist) {
-				if(photos.getFilePath().equals(fp)) {
+			for (Photo photos : photoslist) {
+				if (photos.getFilePath().equals(fp)) {
 					return true;
 				}
 			}
@@ -192,84 +91,81 @@ public class Album implements Serializable{
 	}
 
 	/**
+	 * Gets the date of the first added photo in the album.
 	 *
-	 * @return Date of when photo was first added
+	 * @return The formatted date string or "No Date" if no photos are present.
 	 */
 	public String getFirstDate() {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("E, M-d-y 'at' h:m:s a");
-		Date date = null;
-		String dateStr = "No Date";
-		if (!photoslist.isEmpty()) {
-			date = this.getPhotos().get(0).date;
-			for (Photo photo: photoslist) {
-				if (photo.date.before(date)) {
-					date = photo.date;
-				}
-			}
-			dateStr = dateFormatter.format(date);
-		}
-
-		return dateStr;
+		Date date = findExtremeDate(true);
+		return date != null ? dateFormatter.format(date) : "No Date";
 	}
 
 	/**
+	 * Gets the date of the last altered photo in the album.
 	 *
-	 * @return Date of last altered
+	 * @return The formatted date string or "No Date" if no photos are present.
 	 */
 	public String getLastDate() {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("E, M-d-y 'at' h:m:s a");
+		Date date = findExtremeDate(false);
+		return date != null ? dateFormatter.format(date) : "No Date";
+	}
+
+	// Helper method to find the extreme date for first or last date
+	private Date findExtremeDate(boolean findMin) {
 		Date date = null;
-		String dateStr = "No Date";
 		if (!photoslist.isEmpty()) {
 			date = this.getPhotos().get(0).date;
-			for (Photo photo: photoslist) {
-				if (photo.date.after(date)) {
+			for (Photo photo : photoslist) {
+				if ((findMin && photo.date.before(date)) || (!findMin && photo.date.after(date))) {
 					date = photo.date;
 				}
 			}
-			dateStr = dateFormatter.format(date);
 		}
-
-		return dateStr;
+		return date;
 	}
 
-
-
 	/**
+	 * Gets the name of the album.
 	 *
-	 * @return album name
+	 * @return The name of the album.
 	 */
 	public String getAlbumName() {
 		return albumName;
 	}
 
 	/**
-	 * Sets album name
-	 * @param albumName
+	 * Sets the name of the album.
+	 *
+	 * @param albumName The new name for the album.
 	 */
 	public void setAlbumName(String albumName) {
 		this.albumName = albumName;
 	}
 
 	/**
+	 * Gets the name of the album.
 	 *
-	 * @return name of album
+	 * @return The name of the album.
 	 */
 	public String getName() {
 		return this.albumName;
 	}
 
 	/**
-	 * Renames album
-	 * @param name
+	 * Renames the album.
+	 *
+	 * @param name The new name for the album.
 	 */
 	public void rename(String name) {
 		this.albumName = name;
 	}
 
 	/**
-	 * Adds photot to album
-	 * @param photo
+	 * Adds a photo to the album.
+	 *
+	 * @param photo The photo to be added.
 	 */
 	public void addPhoto(Photo photo) {
 		photoslist.add(photo);
@@ -277,8 +173,9 @@ public class Album implements Serializable{
 	}
 
 	/**
-	 * remove photos from album
-	 * @param index
+	 * Removes a photo from the album.
+	 *
+	 * @param index The index of the photo to be removed.
 	 */
 	public void deletePhoto(int index) {
 		photoslist.remove(index);
@@ -286,31 +183,36 @@ public class Album implements Serializable{
 	}
 
 	/**
+	 * Gets the list of photos in the album.
 	 *
-	 * @return list of photos in array
+	 * @return The list of photos in the album.
 	 */
 	public ArrayList<Photo> getPhotos() {
 		return photoslist;
 	}
 
 	/**
+	 * Gets the current photo.
 	 *
-	 * @return current photo
+	 * @return The current photo.
 	 */
 	public Photo getCurrentPhoto() {
 		return currentPhoto;
 	}
 
 	/**
-	 * Sets current photo
-	 * @param currentPhoto
+	 * Sets the current photo.
+	 *
+	 * @param currentPhoto The new current photo.
 	 */
 	public void setCurrentPhoto(Photo currentPhoto) {
 		this.currentPhoto = currentPhoto;
 	}
 
 	/**
-	 * to String
+	 * Returns the name of the album as a string representation.
+	 *
+	 * @return The name of the album.
 	 */
 	@Override
 	public String toString() {
@@ -318,27 +220,30 @@ public class Album implements Serializable{
 	}
 
 	/**
-	 * Save's state to .dat file
-	 * @param pdApp
-	 * @throws IOException
+	 * Saves the state of the album to a .dat file.
+	 *
+	 * @param album The album to be saved.
+	 * @throws IOException If an I/O error occurs while saving.
 	 */
-	public static void save(Album pdApp) throws IOException {
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-		oos.writeObject(pdApp);
-		oos.close();
+	public static void save(Album album) throws IOException {
+		try (ObjectOutputStream oos = new ObjectOutputStream(
+				new FileOutputStream(storeDir + File.separator + storeFile))) {
+			oos.writeObject(album);
+		}
 	}
 
-
 	/**
-	 * Loads from dat file
-	 * @return lit of users
-	 * @throws IOException
-	 * @throws ClassNotFoundException
+	 * Loads the album from a .dat file.
+	 *
+	 * @return The loaded album.
+	 * @throws IOException            If an I/O error occurs while loading.
+	 * @throws ClassNotFoundException If the class of the serialized object cannot
+	 *                                be found.
 	 */
-	public static Superuser load() throws IOException, ClassNotFoundException {
-		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile));
-		Superuser userList = (Superuser) ois.readObject();
-		ois.close();
-		return userList;
+	public static Album load() throws IOException, ClassNotFoundException {
+		try (ObjectInputStream ois = new ObjectInputStream(
+				new FileInputStream(storeDir + File.separator + storeFile))) {
+			return (Album) ois.readObject();
+		}
 	}
 }
