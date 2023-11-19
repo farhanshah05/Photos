@@ -34,7 +34,7 @@ public class User implements Serializable{
 	 */
 	public Album currentAlbum;
 	
-	public static final String storeDir = "dat";
+	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
 
 

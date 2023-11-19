@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class Photo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final String storeDir = "dat";
+	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
 	// public Image image;
 	
