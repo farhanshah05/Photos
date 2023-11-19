@@ -3,8 +3,8 @@ module Photos02 {
     requires javafx.fxml;
 
 
-    opens com.example.demo to javafx.fxml;
-    exports com.example.demo;
+    opens application to javafx.fxml;
+    exports application;
     exports model;
     opens model to javafx.fxml;
     exports controller;

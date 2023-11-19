@@ -123,7 +123,7 @@ public class SlideshowController implements LogoutController {
 	 * @throws IOException
 	 */
 	public void back(ActionEvent event) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/PhotoView.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
 		PhotoViewController photoViewController = fxmlLoader.getController();
 		Scene adminScene = new Scene(sceneManager);

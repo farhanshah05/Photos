@@ -33,7 +33,7 @@ public interface LogoutController {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) { 
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/Login.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Login.fxml"));
 			Parent sceneManager = (Parent) fxmlLoader.load();
 			Scene adminScene = new Scene(sceneManager);
 			Stage appStage = (Stage) ((Node) e.getSource()).getScene().getWindow();

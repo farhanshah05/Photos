@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import java.util.*;
 
-import com.example.demo.Photos;
+import application.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
-import com.example.demo.Photos;
+import application.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -297,7 +297,7 @@ public class UserController implements LogoutController {
 		adminuser.getUsers().get(currentuserindex).setCurrentAlbum(album);
 		//End Change
 
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/PhotoView.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
 		PhotoViewController photoController = fxmlLoader.getController();
 		Scene adminScene = new Scene(sceneManager);
@@ -348,7 +348,7 @@ public class UserController implements LogoutController {
 	 * @throws IOException
 	 */
 	public void search(ActionEvent event) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/Search.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Search.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
 		SearchController searchController = fxmlLoader.getController();
 		Scene adminScene = new Scene(sceneManager);

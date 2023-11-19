@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.example.demo.Photos;
+import application.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -412,7 +412,7 @@ public class SearchController implements LogoutController {
 	 * @throws IOException
 	 */
 	public void back(ActionEvent event) throws IOException{
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/User.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/User.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
 		UserController userController = fxmlLoader.getController();
 		Scene adminScene = new Scene(sceneManager);

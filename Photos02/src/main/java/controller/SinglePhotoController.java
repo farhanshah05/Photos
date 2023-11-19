@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.example.demo.Photos;
+import application.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -187,7 +187,7 @@ public class SinglePhotoController implements LogoutController {
 //	} 
 	
 	public void back(ActionEvent event) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/PhotoView.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
 		PhotoViewController photoViewController = fxmlLoader.getController();
 		Scene adminScene = new Scene(sceneManager);

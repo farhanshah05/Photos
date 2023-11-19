@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.example.demo.Photos;
+import application.Photos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,7 +51,7 @@ public class LoginController {
 
 		if (username.equals(admin)) {
 			// Load the Admin page if the entered username is the admin
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/Admin.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Admin.fxml"));
 			Parent sceneManager = (Parent) fxmlLoader.load();
 			AdminController adminController = fxmlLoader.getController();
 			Scene adminScene = new Scene(sceneManager);
@@ -64,7 +64,7 @@ public class LoginController {
 			User currentUser = driver.getCurrent();
 			ArrayList<Album> useralbums = currentUser.getAlbums();
 			UserController.username = username;
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/User.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/User.fxml"));
 			Parent sceneManager = (Parent) fxmlLoader.load();
 			UserController userController = fxmlLoader.getController();
 			Scene userScene = new Scene(sceneManager);

@@ -1,6 +1,6 @@
 package model;
 
-import com.example.demo.Photos;
+import application.Photos;
 
 import java.io.File;
 import java.io.FileInputStream;
