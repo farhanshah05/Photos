@@ -48,7 +48,6 @@ public class Photos extends Application {
 			photoLibraryUser = Superuser.load();
 		} catch (IOException | ClassNotFoundException exception) {
 			exception.printStackTrace();
-			// Handle the exception appropriately
 		}
 		launch(args);
 	}

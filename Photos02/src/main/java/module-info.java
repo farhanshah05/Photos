@@ -10,6 +10,4 @@ module Photos02 {
     exports controller;
     opens controller to javafx.fxml;
 
-//    opens application to javafx.fxml;
-//    exports application;
 }

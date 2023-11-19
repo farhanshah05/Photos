@@ -17,7 +17,7 @@ import java.util.*;
  *
  */
 public class Superuser implements Serializable {
-	
+
 	/**
 	 * Class that manages the photo album/
 	 * Also takes care of user persistence
@@ -25,17 +25,17 @@ public class Superuser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
-	
+
 	/**
 	 * List of users
 	 */
 	public ArrayList<User> users;
-	
+
 	/**
 	 * Current user
 	 */
 	public User current;
-	
+
 	/**
 	 * Is the user logged in
 	 */
@@ -50,7 +50,7 @@ public class Superuser implements Serializable {
 		this.current = null;
 		this.loggedIn = false;
 	}
-	
+
 	/**
 	 * Adds a user to a list
 	 * @param username
@@ -58,7 +58,7 @@ public class Superuser implements Serializable {
 	public void addUser(String username) {
 		users.add(new User(username));
 	}
-	
+
 	/**
 	 * Deletes a user
 	 * @param index int
@@ -67,7 +67,7 @@ public class Superuser implements Serializable {
 		users.remove(index);
 		System.out.println(users);
 	}
-	
+
 	/**
 	 * deletes a user
 	 * @param username username
@@ -76,7 +76,7 @@ public class Superuser implements Serializable {
 		User temp = new User(username);
 		users.remove(temp);
 	}
-	
+
 	/**
 	 * check if a user exists
 	 * @param username
@@ -90,8 +90,8 @@ public class Superuser implements Serializable {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * check if user exists
 	 * @param user  username
@@ -104,16 +104,16 @@ public class Superuser implements Serializable {
 				index = i;
 			}
 		}
-		
+
 		if(index == -1) {
 			return false;
 		}
 		this.setCurrent(users.get(index));
 		this.loggedIn = true;
 		return true;
-		
+
 	}
-	
+
 	/**
 	 * Get users current index
 	 * @return index umber of user
@@ -128,15 +128,15 @@ public class Superuser implements Serializable {
 		}
 		return -1;
 	}
-	
+
 	/**
-	 *  
+	 *
 	 * @return list of users
 	 */
 	public ArrayList<User> getUsers(){
 		return users;
 	}
-	
+
 	/**
 	 * Gets a user by username
 	 * @param username username
@@ -148,10 +148,10 @@ public class Superuser implements Serializable {
 				return user;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Set user list
 	 * @param users
@@ -159,7 +159,7 @@ public class Superuser implements Serializable {
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
 	}
-	
+
 	/**
 	 * get current user
 	 * @return current user
@@ -175,18 +175,18 @@ public class Superuser implements Serializable {
 	public void setCurrent(User current) {
 		this.current = current;
 	}
-	
+
 	/**
 	 * Save's state to .dat file
 	 * @param pdApp
 	 * @throws IOException
 	 */
 	public static void save(Superuser pdApp) throws IOException {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-			oos.writeObject(pdApp);
-			oos.close();
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
+		oos.writeObject(pdApp);
+		oos.close();
 	}
-	
+
 	/**
 	 * Loads from dat file
 	 * @return userlist
@@ -198,7 +198,7 @@ public class Superuser implements Serializable {
 		Superuser userList = (Superuser) ois.readObject();
 		ois.close();
 		return userList;
-		
+
 	}
 
 }

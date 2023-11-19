@@ -29,7 +29,7 @@
          <font>
             <Font name="AppleGothic Regular" size="16.0" />
          </font></Text>
-      <ImageView fx:id="displayArea" fitHeight="192.0" fitWidth="293.0" layoutX="12.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="displayArea" fitHeight="192.0" fitWidth="293.0" layoutX="108.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="mCopy" layoutX="221.0" layoutY="273.0" mnemonicParsing="false" onAction="#copy" text="Copy" />
       <Button fx:id="mMove" layoutX="221.0" layoutY="315.0" mnemonicParsing="false" onAction="#move" text="Move" />
       <Text layoutX="13.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Copy Photo To:">
