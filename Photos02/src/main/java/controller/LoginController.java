@@ -20,43 +20,37 @@ import model.Superuser;
 import model.User;
 
 /**
- * @author Farhan Shah
+ * Controller class for the login functionality.
+ * Manages user authentication and navigation to different pages.
  *
+ * @author Farhan Shah
  */
 public class LoginController {
-	
-																		
-	@FXML public Button mLogIn;
-	
-	@FXML public TextField tfUsername;
-	
-	/**
-	 * A string that holds the value of admin
-	 */
+
+	@FXML
+	public Button mLogIn;
+
+	@FXML
+	public TextField tfUsername;
+
+	// Constant for admin username
 	public final String admin = "admin";
-	
-	/**
-	 * A Superuser instance that helps maintain the state of the program
-	 */
+
+	// Static reference to the application's Superuser instance
 	public static Superuser driver = Photos.photoLibraryUser;
 
 	/**
-	 * A login activity that redirects the user based on the username.
-	 * The username admin will redirect the user to the admin page.
-	 * If the user exists, they will be redirected to their own album page
-	 * If no user exists, an error message will appear
-	 * @param event
-	 * @throws IOException
+	 * Handles the login process when the user clicks the login button.
+	 * Redirects users based on their input.
+	 *
+	 * @param event ActionEvent triggered by the login button
+	 * @throws IOException if there is an issue loading the FXML file for the next scene
 	 */
-
 	public void login(ActionEvent event) throws IOException {
-		
-		//Make lowercase idk????. Also check edge cases
 		String username = tfUsername.getText().trim();
-		//Parent sceneManager;
-		
 
 		if (username.equals(admin)) {
+			// Load the Admin page if the entered username is the admin
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/demo/Admin.fxml"));
 			Parent sceneManager = (Parent) fxmlLoader.load();
 			AdminController adminController = fxmlLoader.getController();
@@ -65,8 +59,8 @@ public class LoginController {
 			adminController.start();
 			appStage.setScene(adminScene);
 			appStage.show();
-		}
-		else if (driver.checkUser(username)) {
+		} else if (driver.checkUser(username)) {
+			// Load the User page if the entered username is a valid user
 			User currentUser = driver.getCurrent();
 			ArrayList<Album> useralbums = currentUser.getAlbums();
 			UserController.username = username;
@@ -78,37 +72,40 @@ public class LoginController {
 			userController.start(appStage);
 			appStage.setScene(userScene);
 			appStage.show();
-		}
-		else if (username.isEmpty() || username == null) {
-//			System.out.print("Empty String");
+		} else if (username.isEmpty() || username == null) {
+			// Display an error if the username is empty
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error Dialog");
 			alert.setHeaderText("Please enter a username");
-			//alert.showAndWait();
-			Optional<ButtonType> buttonClicked=alert.showAndWait();
-			if (buttonClicked.get()==ButtonType.OK) {
+			Optional<ButtonType> buttonClicked = alert.showAndWait();
+			if (buttonClicked.get() == ButtonType.OK) {
 				alert.close();
-			}
-			else {
+			} else {
 				alert.close();
 			}
 		} else {
+			// Display an error if the entered username is not valid
 			System.out.println("Incorrect Input");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Login Issue Encountered");
 			alert.setHeaderText("Please enter a valid username");
-			Optional<ButtonType> buttonClicked=alert.showAndWait();
-			if (buttonClicked.get()==ButtonType.OK) {
+			Optional<ButtonType> buttonClicked = alert.showAndWait();
+			if (buttonClicked.get() == ButtonType.OK) {
+				alert.close();
+			} else {
 				alert.close();
 			}
-			else {
-				alert.close();
-			}
-			
+
 		}
-		
-		
 	}
+
+	/**
+	 * Handles the Enter key press event in the username TextField.
+	 * Calls the login method when Enter is pressed.
+	 *
+	 * @param keyEvent KeyEvent triggered by pressing a key
+	 * @throws IOException if there is an issue loading the FXML file for the next scene
+	 */
 	@FXML
 	public void handleEnterKey(javafx.scene.input.KeyEvent keyEvent) throws IOException {
 		if (keyEvent.getCode() == KeyCode.ENTER) {
