@@ -1,76 +1,37 @@
 package model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Date;
 
-
 /**
- * Allows users to manipulate photos
- * @author Farhan Shah
- *
+ * Represents a photo and provides methods to manipulate photo data.
+ * Author: Farhan Shah
  */
 public class Photo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String storeDir = "data";
 	public static final String storeFile = "users.dat";
-	// public Image image;
-	
-	/**
-	 * Photo name
-	 */
+
+	// Photo attributes
 	public String photoname;
-	
-	/**
-	 * file of the picture
-	 */
 	public File pic;
-	
-	/**
-	 * List of tags
-	 */
 	public ArrayList<Tag> taglist;
-	
-	/**
-	 * Photo caption
-	 */
 	public String caption;
-	
-	/**
-	 * Filepath of photo
-	 */
 	public String filepath;
-	
-	/**
-	 * Calendar instance
-	 */
 	public Calendar cal;
-	
-	/**
-	 * Current date
-	 */
 	public Date date;
-	
-	/**
-	 * Check if stock photo
-	 */
 	public boolean isStock = false;
-	
+
 	/**
-	 * Photo constructor
-	 * @param pic
-	 * @param photoname
+	 * Photo constructor.
+	 * @param pic The file of the picture.
+	 * @param photoname The name of the photo.
 	 */
 	public Photo(File pic, String photoname) {
-		this.photoname = photoname; 
+		this.photoname = photoname;
 		if (pic != null) this.pic = new File(photoname);
 		else this.pic = pic;
 		this.taglist = new ArrayList<Tag>();
@@ -78,148 +39,147 @@ public class Photo implements Serializable {
 		cal.set(Calendar.MILLISECOND, 0);
 		this.date = cal.getTime();
 	}
-	
+
 	/**
-	 * Sets captions
-	 * @param caption
+	 * Sets the caption for the photo.
+	 * @param caption The caption to set.
 	 */
 	public void setCaption(String caption) {
 		this.caption = caption;
 	}
-	
+
 	/**
-	 * Adds tags to photo
-	 * @param name name of tag
-	 * @param value value of tag
+	 * Adds a tag to the photo.
+	 * @param name The name of the tag.
+	 * @param value The value of the tag.
 	 */
 	public void addTag(String name, String value) {
-		taglist.add(new Tag(name,value));
+		taglist.add(new Tag(name, value));
 	}
-	
+
 	/**
-	 * Removes tag
-	 * @param name name of tag
-	 * @param value value of tag
+	 * Removes a tag from the photo.
+	 * @param name The name of the tag.
+	 * @param value The value of the tag.
 	 */
 	public void removeTag(String name, String value) {
-		for(int i = 0; i < taglist.size(); i++) {
+		for (int i = 0; i < taglist.size(); i++) {
 			Tag cur = taglist.get(i);
-			if(cur.name.toLowerCase().equals(name.toLowerCase()) && cur.value.toLowerCase().equals(value.toLowerCase())) {
+			if (cur.name.toLowerCase().equals(name.toLowerCase()) && cur.value.toLowerCase().equals(value.toLowerCase())) {
 				taglist.remove(i);
 			}
 		}
 	}
-	
+
 	/**
-	 * Check if tag exists
-	 * @param name
-	 * @param value
-	 * @return
+	 * Checks if a tag exists for the photo.
+	 * @param name The name of the tag.
+	 * @param value The value of the tag.
+	 * @return True if the tag exists, false otherwise.
 	 */
 	public boolean tagExists(String name, String value) {
-		for(int i = 0; i < taglist.size(); i++) {
+		for (int i = 0; i < taglist.size(); i++) {
 			Tag cur = taglist.get(i);
-			if(cur.name.toLowerCase().equals(name.toLowerCase()) && cur.value.toLowerCase().equals(value.toLowerCase())) {
+			if (cur.name.toLowerCase().equals(name.toLowerCase()) && cur.value.toLowerCase().equals(value.toLowerCase())) {
 				return true;
 			}
 		}
 		return false;
-		
 	}
-	
+
 	/**
-	 *  
-	 * @return Dates
+	 * Gets the date when the photo was taken.
+	 * @return The date of the photo.
 	 */
 	public Date getDate() {
 		return date;
 	}
 
-	
 	/**
-	 * 
-	 * @return list of tags
+	 * Gets the list of tags associated with the photo.
+	 * @return The list of tags.
 	 */
-	public ArrayList<Tag> getTagList(){
+	public ArrayList<Tag> getTagList() {
 		return taglist;
 	}
-	
+
 	/**
-	 * sets file path
-	 * @param fp
+	 * Sets the file path for the photo.
+	 * @param fp The file path to set.
 	 */
 	public void setFilePath(String fp) {
 		this.filepath = fp;
 	}
-	
+
 	/**
-	 *  
-	 * @return file path of photo
+	 * Gets the file path of the photo.
+	 * @return The file path of the photo.
 	 */
 	public String getFilePath() {
 		return filepath;
 	}
-	
+
 	/**
-	 * Sets picture
-	 * @param pic
+	 * Sets the picture file for the photo.
+	 * @param pic The picture file to set.
 	 */
 	public void setPic(File pic) {
 		this.pic = pic;
 	}
-	
+
 	/**
-	 * 
-	 * @return picture
+	 * Gets the picture file of the photo.
+	 * @return The picture file of the photo.
 	 */
 	public File getPic() {
 		return this.pic;
 	}
-	
+
 	/**
-	 *  
-	 * @return caption of photo
+	 * Gets the caption of the photo.
+	 * @return The caption of the photo.
 	 */
 	public String getCaption() {
 		return caption;
 	}
-	
+
 	/**
-	 * 
-	 * @return name of photo
+	 * Gets the name of the photo.
+	 * @return The name of the photo.
 	 */
 	public String getName() {
 		return photoname;
 	}
-	
+
 	/**
-	 * to string
+	 * Converts the photo to a string representation (its name).
+	 * @return The string representation of the photo.
 	 */
 	@Override
 	public String toString() {
 		return getName();
 	}
-	
+
 	/**
-	 * Save's state to .dat file
-	 * @param pdApp
-	 * @throws IOException
+	 * Saves the state of the photo to a .dat file.
+	 * @param pdApp The Photo object to save.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void save(Photo pdApp) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
 		oos.writeObject(pdApp);
 		oos.close();
 	}
-	
+
 	/**
-	 * Loads from dat file
-	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
+	 * Loads a Photo object from a .dat file.
+	 * @return The loaded Photo object.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws ClassNotFoundException If the class of a serialized object cannot be found.
 	 */
-	public static User load() throws IOException, ClassNotFoundException {
+	public static Photo load() throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile));
-		User userList = (User) ois.readObject();
+		Photo userList = (Photo) ois.readObject();
 		ois.close();
 		return userList;
 	}
