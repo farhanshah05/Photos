@@ -12,6 +12,6 @@
         <Label layoutX="150.0" layoutY="140.0" text="Username:" style="-fx-font-family: 'Arial'; -fx-font-size: 14.0;" />
         <TextField fx:id="tfUsername" layoutX="150.0" layoutY="170.0" prefHeight="40.0" prefWidth="300.0" onKeyPressed="#handleEnterKey" promptText="Username" style="-fx-font-family: 'Arial'; -fx-font-size: 14.0;" />
 <!--        <TextField fx:id="tfUsername" onKeyPressed="#handleEnterKey"/>-->
-        <Button fx:id="mLogIn" layoutX="250.0" layoutY="230.0" mnemonicParsing="false" onAction="#login" onMouseClicked="#login" prefHeight="40.0" prefWidth="100.0" text="Log In" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+        <Button fx:id="mLogIn" layoutX="250.0" layoutY="230.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="100.0" text="Log In" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
     </children>
 </AnchorPane>
