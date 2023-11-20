@@ -14,14 +14,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 /**
- * Interface that helps logging the user our
+ * Interface that helps logging the user out.
+ *
  * @author Farhan Shah
- * 
  */
 public interface LogoutController {
-	
+
+	String LOGIN_FXML_PATH = "/application/Login.fxml";
+
 	/**
-	 * A helper method that logs the user out of the program and redirects them to the login screen
+	 * A helper method that logs the user out of the program and redirects them to
+	 * the login screen.
+	 *
 	 * @param e
 	 * @throws IOException
 	 */
@@ -32,17 +36,15 @@ public interface LogoutController {
 		alert.setContentText("Are you sure you want to logout of your account?");
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK) { 
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Login.fxml"));
-			Parent sceneManager = (Parent) fxmlLoader.load();
-			Scene adminScene = new Scene(sceneManager);
+		if (result.isPresent() && result.get() == ButtonType.OK) {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(LOGIN_FXML_PATH));
+			Parent sceneManager = fxmlLoader.load();
+			Scene loginScene = new Scene(sceneManager);
 			Stage appStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-			appStage.setScene(adminScene);
-			appStage.show();	      
+			appStage.setScene(loginScene);
+			appStage.show();
 		} else {
-			return;
+			alert.close();
 		}
-		
 	}
-
 }
