@@ -53,7 +53,7 @@ public class Photos extends Application {
 				System.err.println("Error saving photo library user data: " + ioException.getMessage());
 				ioException.printStackTrace();
 			}
-			System.out.print("Application Closed");
+			//System.out.print("Application Closed");
 		});
 	}
 

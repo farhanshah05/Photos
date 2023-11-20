@@ -118,9 +118,7 @@ public class SinglePhotoController implements LogoutController {
 		} else {
 			Tag tag = new Tag(tagName, tagValue);
 			adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().addTag(tag.name, tag.value);
-			System.out.println(adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList());
-
-		// LEfT OFF HERE
+//			System.out.println(adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList());
 			update();
 			Superuser.save(adminuser);
 		}
@@ -156,7 +154,7 @@ public class SinglePhotoController implements LogoutController {
 		}
 		obstag = FXCollections.observableArrayList(tagdisplay);
 		listview.setItems(obstag);
-		System.out.println(taglist.toString());
+//		System.out.println(taglist.toString());
 		tfTagName.clear();
 		tfTagValue.clear();
 	}
@@ -199,7 +197,7 @@ public class SinglePhotoController implements LogoutController {
 	
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
-		System.out.println("Logged Out");
+//		System.out.println("Logged Out");
 	}
 	
 }

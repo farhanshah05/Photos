@@ -92,7 +92,7 @@ public class PhotoViewController implements LogoutController {
 		displayArea.setFitHeight(100);
 		displayArea.setFitWidth(100);
 		displayArea.setPreserveRatio(false);
-		System.out.println("User Page");
+//		System.out.println("User Page");
 		update();
 		if(adminuser.getCurrent().getCurrentAlbum().getPhotos().size() == 0) {
 			mDelete.setVisible(false);
@@ -162,7 +162,7 @@ public class PhotoViewController implements LogoutController {
 			}
 			return;
 		}
-		System.out.println("move");
+//		System.out.println("move");
 	}
 	
 	/**
@@ -212,7 +212,7 @@ public class PhotoViewController implements LogoutController {
 			}
 			return;
 		}
-		System.out.println("move");
+//		System.out.println("move");
 	}
 	
 	/**
@@ -468,7 +468,7 @@ public class PhotoViewController implements LogoutController {
 	 */
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
-		System.out.println("Logged Out");
+//		System.out.println("Logged Out");
 	}
 
 }

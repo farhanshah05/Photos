@@ -110,7 +110,7 @@ public class SearchController implements LogoutController {
 		if(from == null || to == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error Dialog");
-			alert.setHeaderText("Pleas fill in the date fields!");
+			alert.setHeaderText("Please fill in the date fields!");
 			alert.setContentText("Dates cannot be left blank!");
 			Optional<ButtonType> buttonClicked=alert.showAndWait();
 			if (buttonClicked.get()==ButtonType.OK) {
@@ -172,7 +172,7 @@ public class SearchController implements LogoutController {
 			}
 			return;	
 		}
-		System.out.println("Or search");
+//		System.out.println("Or search");
 		mAllSearch.setVisible(false); 
 		mAllSearch.setDisable(true);
 		mSearchDate.setVisible(false);
@@ -206,7 +206,7 @@ public class SearchController implements LogoutController {
 			}
 			return;	
 		}
-		System.out.println("And search");
+//		System.out.println("And search");
 		mAnySearch.setVisible(false);
 		mAnySearch.setDisable(true);
 		mSearchDate.setVisible(false);
@@ -429,7 +429,7 @@ public class SearchController implements LogoutController {
 	 */
 	public void logOut(ActionEvent event) throws IOException{
 		logMeOut(event);
-		System.out.println("Logged out from: Search");
+//		System.out.println("Logged out from: Search");
 	}
 
 

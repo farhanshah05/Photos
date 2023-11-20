@@ -138,6 +138,6 @@ public class SlideshowController implements LogoutController {
 	 */
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
-		System.out.println("Logged Out");
+//		System.out.println("Logged Out");
 	}
 }
