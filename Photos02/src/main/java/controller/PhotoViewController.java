@@ -255,7 +255,7 @@ public class PhotoViewController implements LogoutController {
 			tDate.setText("Date: ");
 		}
 	}
-	
+
 	/**
 	 * Adds a photo to the current album
 	 * @throws IOException
@@ -265,7 +265,7 @@ public class PhotoViewController implements LogoutController {
 		FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif");
 		filechooser.getExtensionFilters().add(extFilterJPG);
 		File imgfile = filechooser.showOpenDialog(null);
-		
+
 		if (imgfile == null) {
 			return;
 		} /*else if (album.exists(imgfile.getAbsolutePath())) {
@@ -275,8 +275,8 @@ public class PhotoViewController implements LogoutController {
 			alert.showAndWait();
 			return;
 		}*/ else {
-			
-			
+
+
 				String filepath = imgfile.getAbsolutePath();
 				Photo newPhoto;
 				if(adminuser.getCurrent().getUsername().equals("stock")) {
@@ -288,27 +288,27 @@ public class PhotoViewController implements LogoutController {
 						newPhoto2.isStock = true;
 						album.addPhoto(newPhoto2);
 					} else {
-						newPhoto = new Photo(imgfile, filepath);	
+						newPhoto = new Photo(imgfile, filepath);
 						album.addPhoto(newPhoto);
 					}
 				} else {
-					newPhoto = new Photo(imgfile, filepath);	
+					newPhoto = new Photo(imgfile, filepath);
 					album.addPhoto(newPhoto);
 				}
 				update();
-			
+
 		}
 		if(adminuser.getCurrent().getCurrentAlbum().getPhotos().size() > 0) {
 			mDelete.setVisible(true);
 		}
 		if(!photolist.isEmpty()) {
-    		listview.getSelectionModel().select(0); //select first user
+    		listview.getSelectionModel().select(0);
 		}
-		
+
 		Album.save(album);
-		
+
 	}
-	
+
 	/**
 	 * Deletes the photo from the current album
 	 * @throws IOException
