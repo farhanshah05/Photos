@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Objects;
 
 import application.Photos;
 import javafx.event.ActionEvent;
@@ -12,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import model.Album;
@@ -28,16 +28,16 @@ import model.User;
 public class LoginController {
 
 	@FXML
-	public Button mLogIn;
+	public Button loginButton;
 
 	@FXML
 	public TextField tfUsername;
 
 	// Constant for admin username
-	public final String admin = "admin";
+	private static final String ADMIN_USERNAME = "admin";
 
 	// Static reference to the application's Superuser instance
-	public static Superuser driver = Photos.photoLibraryUser;
+	private static final Superuser photoLibraryUser = Photos.photoLibraryUser;
 
 	/**
 	 * Handles the login process when the user clicks the login button.
@@ -47,55 +47,37 @@ public class LoginController {
 	 * @throws IOException if there is an issue loading the FXML file for the next scene
 	 */
 	public void login(ActionEvent event) throws IOException {
-		String username = tfUsername.getText().trim();
+		String username = Objects.requireNonNull(tfUsername.getText()).trim();
 
-		if (username.equals(admin)) {
+		if (ADMIN_USERNAME.equals(username)) {
 			// Load the Admin page if the entered username is the admin
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Admin.fxml"));
-			Parent sceneManager = (Parent) fxmlLoader.load();
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FxmlPaths.ADMIN_PAGE));
+			Parent sceneManager = fxmlLoader.load();
 			AdminController adminController = fxmlLoader.getController();
 			Scene adminScene = new Scene(sceneManager);
 			Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 			adminController.start();
 			appStage.setScene(adminScene);
 			appStage.show();
-		} else if (driver.checkUser(username)) {
+		} else if (photoLibraryUser.checkUser(username)) {
 			// Load the User page if the entered username is a valid user
-			User currentUser = driver.getCurrent();
-			ArrayList<Album> useralbums = currentUser.getAlbums();
+			User currentUser = photoLibraryUser.getCurrent();
+			ArrayList<Album> userAlbums = currentUser.getAlbums();
 			UserController.username = username;
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/User.fxml"));
-			Parent sceneManager = (Parent) fxmlLoader.load();
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FxmlPaths.USER_PAGE));
+			Parent sceneManager = fxmlLoader.load();
 			UserController userController = fxmlLoader.getController();
 			Scene userScene = new Scene(sceneManager);
 			Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 			userController.start(appStage);
 			appStage.setScene(userScene);
 			appStage.show();
-		} else if (username.isEmpty() || username == null) {
+		} else if (username.isEmpty()) {
 			// Display an error if the username is empty
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error Dialog");
-			alert.setHeaderText("Please enter a username");
-			Optional<ButtonType> buttonClicked = alert.showAndWait();
-			if (buttonClicked.get() == ButtonType.OK) {
-				alert.close();
-			} else {
-				alert.close();
-			}
+			showAlert("Error Dialog", "Please enter a username");
 		} else {
 			// Display an error if the entered username is not valid
-			System.out.println("Incorrect Input");
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Login Issue Encountered");
-			alert.setHeaderText("Please enter a valid username");
-			Optional<ButtonType> buttonClicked = alert.showAndWait();
-			if (buttonClicked.get() == ButtonType.OK) {
-				alert.close();
-			} else {
-				alert.close();
-			}
-
+			showAlert("Login Issue Encountered", "Please enter a valid username");
 		}
 	}
 
@@ -111,5 +93,27 @@ public class LoginController {
 		if (keyEvent.getCode() == KeyCode.ENTER) {
 			login(new ActionEvent(tfUsername, null));
 		}
+	}
+
+	/**
+	 * Displays an alert with the specified title and content.
+	 *
+	 * @param title   Alert title.
+	 * @param content Alert content.
+	 */
+	private void showAlert(String title, String content) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
+
+	/**
+	 * Class to hold constant FXML file paths.
+	 */
+	private static class FxmlPaths {
+		static final String ADMIN_PAGE = "/application/Admin.fxml";
+		static final String USER_PAGE = "/application/User.fxml";
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Objects;
 
 /**
  * Controller class for handling actions on the Admin Page.
+ * @author Farhan Shah
  */
 public class AdminController implements LogoutController {
 
