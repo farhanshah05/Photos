@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 
 import application.Photos;
@@ -27,13 +28,8 @@ import model.Album;
 import model.Superuser;
 import model.User;
 
-
-/**
- * User controller controls all the actions from opening/adding/deleting albums to searching
- * @author Farhan Shah
- *
- */
 public class UserController implements LogoutController {
+
 	@FXML
 	public ListView<Album> listview;
 
@@ -47,146 +43,76 @@ public class UserController implements LogoutController {
 	public Text tUser, tNumber, tDateSpan;
 
 	@FXML
-	public TextField tfName, tfNewAlbum; //user1 and user2
+	public TextField tfName, tfNewAlbum;
 
-	/**
-	 * Current Username
-	 */
 	public static String username;
 
-	/**
-	 * Stores instances of all albumss
-	 */
 	public static ArrayList<Album> albumlist = new ArrayList<>();
 
-	/**
-	 * Helps display the albumlist
-	 */
 	public ObservableList<Album> observableList;
 
-	/**
-	 * A Superuser instance that helps maintain the state of the program
-	 */
 	public static Superuser adminuser = Photos.photoLibraryUser;
 
-	/**
-	 * Stores current user
-	 */
 	public static User user;
 
-	/**
-	 * Current stock photo
-	 */
 	public static boolean stock;
 
-	/**
-	 * When the scene loads the page updates the album listview
-	 * @param app_stage
-	 */
 	public void start(Stage app_stage) {
 		update();
 
 		app_stage.setTitle(adminuser.getCurrent().getUsername() + "'s" + " Photo Albums");
-		if(!albumlist.isEmpty()) {
-			listview.getSelectionModel().select(0); //select first user
+		if (!albumlist.isEmpty()) {
+			listview.getSelectionModel().select(0);
 		}
 
-		// Listen for selection changes
 		if (albumlist.size() > 0) {
 			tfName.setText(albumlist.get(0).albumName);
 			tNumber.setText("Number of Photos: " + albumlist.get(0).photoCount);
 			tDateSpan.setText("Date Span (First, Last): \n\t" + albumlist.get(0).getFirstDate() + "\n\t" + albumlist.get(0).getLastDate());
 		}
-		listview.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> updateContent(newValue) );
+		listview.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> updateContent(newValue));
 	}
 
-	/**
-	 * Sorts alphabetically, A-first to Z-last
-	 * @throws IOException
-	 */
+	private void sortAlbums(Comparator<Album> comparator) throws IOException {
+		Collections.sort(albumlist, comparator);
+		observableList = FXCollections.observableArrayList(albumlist);
+		listview.setItems(observableList);
+		listview.refresh();
+		User.save(user);
+	}
+
 	public void sortByAZ() throws IOException {
-		Collections.sort(albumlist, Album.sortByAZ);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByAZ);
 	}
 
-	/**
-	 * Sorts alphabetically, Z-first to A-last
-	 * @throws IOException
-	 */
 	public void sortByZA() throws IOException {
-		Collections.sort(albumlist, Album.sortByZA);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByZA);
 	}
 
-	/**
-	 * Sorts by album size, increasing
-	 * @throws IOException
-	 */
 	public void sortByIP() throws IOException {
-		Collections.sort(albumlist, Album.sortByIP);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByIP);
 	}
 
-	/**
-	 * Sorts by album size, decreasing
-	 * @throws IOException
-	 */
 	public void sortByDP() throws IOException {
-		Collections.sort(albumlist, Album.sortByDP);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByDP);
 	}
 
-	/**
-	 * Sort by oldest to newest date
-	 * @throws IOException
-	 */
 	public void sortByID() throws IOException {
-		Collections.sort(albumlist, Album.sortByID);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByID);
 	}
 
-	/**
-	 * Sort by newest to oldest date
-	 * @throws IOException
-	 */
 	public void sortByDD() throws IOException {
-		Collections.sort(albumlist, Album.sortByDD);
-		observableList = FXCollections.observableArrayList(albumlist);
-		listview.setItems(observableList);
-		listview.refresh();
-		User.save(user);
+		sortAlbums(Album.sortByDD);
 	}
 
-	/**
-	 * Updates the values of the Album properties
-	 * @param newValue The new album value
-	 */
-	private void updateContent(Album newValue) {
-		if (newValue != null) {
-			tfName.setText(newValue.albumName);
-			tNumber.setText("Number of Photos: " + newValue.photoCount);
-			tDateSpan.setText("Date Span: \n\t" + newValue.getFirstDate() + " \n\t" + newValue.getLastDate());
+	private void updateContent(Album album) {
+		if (album != null) {
+			tfName.setText(album.albumName);
+			tNumber.setText("Number of Photos: " + album.photoCount);
+			tDateSpan.setText("Date Span: \n\t" + album.getFirstDate() + " \n\t" + album.getLastDate());
 		}
 	}
 
-	/**
-	 * Updates properties of the album
-	 */
 	public void updateContentBack() {
 		if (albumlist.size() > 0) {
 			Album alb = listview.getSelectionModel().getSelectedItem();
@@ -195,27 +121,24 @@ public class UserController implements LogoutController {
 		}
 	}
 
-	/**
-	 * Add album to as user's album list
-	 * @throws IOException
-	 */
+	private void showErrorAlert(String title, String content) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
+
 	public void addAlbum() throws IOException {
 		String albumname = tfNewAlbum.getText().trim();
 		Album album = new Album(albumname);
 
-		if(albumname.isEmpty() || albumname == null) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Empty Field");
-			alert.setContentText("Please enter an album name.");
-			alert.showAndWait();
+		if (albumname.isEmpty() || albumname == null) {
+			showErrorAlert("Empty Field", "Please enter an album name.");
 			return;
-		} else if(user.exists(album)) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Album already exists.");
-			alert.setContentText("Try entering a new album!");
-			alert.showAndWait();
+		} else if (user.exists(album)) {
+			showErrorAlert("Album already exists.", "Try entering a new album!");
 			return;
-		}else {
+		} else {
 			user.addAlbum(album);
 			update();
 			tfNewAlbum.clear();
@@ -223,10 +146,6 @@ public class UserController implements LogoutController {
 		User.save(user);
 	}
 
-	/**
-	 * Renames an album
-	 * @throws IOException
-	 */
 	public void renameAlbum() throws IOException {
 		String newName = tfName.getText().trim();
 
@@ -236,22 +155,13 @@ public class UserController implements LogoutController {
 		Album tempAlbum = new Album(newName);
 
 		if (newName.length() == 0) {
-			Alert alert2 = new Alert(AlertType.ERROR);
-			alert2.setTitle("Rename Error");
-			alert2.setContentText("Please enter a valid album name.");
-			alert2.showAndWait();
+			showErrorAlert("Rename Error", "Please enter a valid album name.");
 			return;
 		} else if (newName.equals(album.albumName)) {
-			Alert alert2 = new Alert(AlertType.ERROR);
-			alert2.setTitle("Rename Error");
-			alert2.setContentText("No changes made. Please enter a valid album name before clicking 'Rename'.");
-			alert2.showAndWait();
+			showErrorAlert("Rename Error", "No changes made. Please enter a valid album name before clicking 'Rename'.");
 			return;
 		} else if (user.exists(tempAlbum)) {
-			Alert alert2 = new Alert(AlertType.ERROR);
-			alert2.setTitle("Rename Error");
-			alert2.setContentText("Album name already in use.");
-			alert2.showAndWait();
+			showErrorAlert("Rename Error", "Album name already in use.");
 			return;
 		} else {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -271,31 +181,20 @@ public class UserController implements LogoutController {
 		return;
 	}
 
-	/**
-	 * Opens an album and sends it to the photoview scene
-	 * @param event
-	 * @throws IOException
-	 */
 	public void openAlbum(ActionEvent event) throws IOException {
 		PhotoViewController.user = user;
 		PhotoViewController.album = listview.getSelectionModel().getSelectedItem();
 		PhotoViewController.albumlist = albumlist;
 
-		//Changed
 		int albumindex = listview.getSelectionModel().getSelectedIndex();
 		int currentuserindex = adminuser.getUserIndex();
-		if(adminuser.getUsers().get(currentuserindex).getAlbums().size() == 0) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Empty Deletion");
-			alert.setHeaderText(null);
-			alert.setContentText("Cannot delete something that isn't there");
-			alert.showAndWait();
+		if (adminuser.getUsers().get(currentuserindex).getAlbums().size() == 0) {
+			showErrorAlert("Empty Deletion", "Cannot delete something that isn't there");
 			return;
 		}
 		Album album = adminuser.getUsers().get(currentuserindex).getAlbums().get(albumindex);
 
 		adminuser.getUsers().get(currentuserindex).setCurrentAlbum(album);
-		//End Change
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
@@ -307,10 +206,6 @@ public class UserController implements LogoutController {
 		appStage.show();
 	}
 
-	/**
-	 * Deletes an album from the user list
-	 * @throws IOException
-	 */
 	public void deleteAlbum() throws IOException {
 		int index = listview.getSelectionModel().getSelectedIndex();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -331,7 +226,7 @@ public class UserController implements LogoutController {
 				if (user.getAlbums().size() == 1) {
 					listview.getSelectionModel().select(0);
 				} else if (index == lastuserindex) {
-					listview.getSelectionModel().select(lastuserindex-1);
+					listview.getSelectionModel().select(lastuserindex - 1);
 				} else {
 					listview.getSelectionModel().select(index);
 				}
@@ -342,11 +237,6 @@ public class UserController implements LogoutController {
 		return;
 	}
 
-	/**
-	 * Redirects the user to the search page
-	 * @param event
-	 * @throws IOException
-	 */
 	public void search(ActionEvent event) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/Search.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
@@ -356,25 +246,14 @@ public class UserController implements LogoutController {
 		searchController.start();
 		appStage.setScene(adminScene);
 		appStage.show();
-
 	}
 
-	/**
-	 * Logs the current user out
-	 * @param event
-	 * @throws IOException
-	 */
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
-		//System.out.println("Logged Out");
 	}
 
-	/**
-	 * Updates the albums contents
-	 */
 	public void update() {
 		tUser.setText(username + "'s Album List:");
-		// tfName.setText(listview.getSelectionModel().getSelectedItem());
 		user = adminuser.getUser(username);
 
 		albumlist.clear();
