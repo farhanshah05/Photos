@@ -62,30 +62,11 @@ public class SearchController implements LogoutController {
 	
 	@FXML
 	public DatePicker dTo, dFrom;
-	
-	/**
-	 * Stores instances of tags
-	 */
+
 	public ArrayList<Tag> taglist = new ArrayList<Tag>();
-	
-	/**
-	 * Stores the properties of a tag in a string format
-	 */
 	public ArrayList<String> tagdisplay = new ArrayList<String>();
-	
-	/**
-	 * Helps display a list of tags in a listview
-	 */
 	public ObservableList<String> obsTag;
-	
-	/**
-	 * Helps display the results of a search in a listview
-	 */
 	public ObservableList<Photo> obsPhoto;
-	
-	/**
-	 * An array list that stores instances of photos that are returned from searches
-	 */
 	public ArrayList<Photo> photolist = new ArrayList<Photo>();
 	
 	
@@ -106,35 +87,14 @@ public class SearchController implements LogoutController {
 		this.photolist.clear();
 		LocalDate from = dFrom.getValue();
 		LocalDate to = dTo.getValue();
-		
+
 		if(from == null || to == null) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error Dialog");
-			alert.setHeaderText("Please fill in the date fields!");
-			alert.setContentText("Dates cannot be left blank!");
-			Optional<ButtonType> buttonClicked=alert.showAndWait();
-			if (buttonClicked.get()==ButtonType.OK) {
-				alert.close();
-			}
-		   else {
-			   alert.close();
-		   }
+			showErrorDialog("Error Dialog", "Please fill in the date fields!", "Dates cannot be left blank!");
 			return;
 		}
-		
-		if(to.isBefore(from)) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error Dialog");
-			alert.setHeaderText("Invalid Date Range");
-			alert.setContentText("The From date should be before the To date.");
 
-			Optional<ButtonType> buttonClicked=alert.showAndWait();
-			if (buttonClicked.get()==ButtonType.OK) {
-				alert.close();
-			}
-			else {
-			   alert.close();
-			}
+		if(to.isBefore(from)) {
+			showErrorDialog("Error Dialog", "Please fill in the date fields!", "Dates cannot be left blank!");
 			return;
 		}
 		mAnySearch.setVisible(false);
@@ -145,8 +105,8 @@ public class SearchController implements LogoutController {
 
 		//need method to display photos
 		displayPhotos();
-		
-		
+
+
 	}
 	
 	/**
@@ -158,29 +118,18 @@ public class SearchController implements LogoutController {
 	public void orSearch(ActionEvent event) throws IOException{
 		this.photolist.clear();
 		if(taglist.isEmpty() || taglist == null) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Empty List!");
-			alert.setHeaderText("Please add tags to the list");
-			alert.setContentText("List of tags is empty!");
-
-			Optional<ButtonType> buttonClicked=alert.showAndWait();
-			if (buttonClicked.get()==ButtonType.OK) {
-				alert.close();
-			}
-			else {
-			   alert.close();
-			}
-			return;	
+			showErrorDialog("Empty List!", "Please add tags to the list", "List of tags is empty!");
+			return;
 		}
 //		System.out.println("Or search");
-		mAllSearch.setVisible(false); 
+		mAllSearch.setVisible(false);
 		mAllSearch.setDisable(true);
 		mSearchDate.setVisible(false);
 		mSearchDate.setDisable(true);
 		this.photolist = Photos.photoLibraryUser.getCurrent().getOrTaggedPhotos(taglist);
 		displayPhotos();
 		// Need to use this list to display pictures some how
-		
+
 	}
 	
 	/**
@@ -204,7 +153,7 @@ public class SearchController implements LogoutController {
 			else {
 			   alert.close();
 			}
-			return;	
+			return;
 		}
 //		System.out.println("And search");
 		mAnySearch.setVisible(false);
@@ -214,7 +163,7 @@ public class SearchController implements LogoutController {
 		this.photolist = Photos.photoLibraryUser.getCurrent().getAndTaggedPhotos(taglist);
 		displayPhotos();
 	}
-	
+
 	/**
 	 * Allows the user to add a tag to a photo
 	 * @param event
@@ -234,13 +183,13 @@ public class SearchController implements LogoutController {
 			   else {
 				   alert.close();
 			   }
-			return;		
+			return;
 		}
 		Tag tag = new Tag(tfName.getText().trim(), tfValue.getText().trim());
 		taglist.add(tag);
 		updateTagList();
 	}
-	
+
 	/**
 	 * Refreshes the listview for the taglist on add and remove tag options
 	 */
@@ -251,82 +200,82 @@ public class SearchController implements LogoutController {
 		}
 		obsTag = FXCollections.observableArrayList(tagdisplay);
 		listview.setItems(obsTag);
-		
+
 		tfName.clear();
 		tfValue.clear();
 
 	}
-	
+
 	/**
 	 * Displays the photos in the listview
 	 */
 	public void displayPhotos() {
 		obsPhoto = FXCollections.observableArrayList(photolist);
-		
+
 		photolistview.setCellFactory(new Callback<ListView<Photo>, ListCell<Photo>>(){
 			@Override
 			public ListCell<Photo> call(ListView<Photo> p){
 				return new Results();
 			}
-			
+
 		});
-		
+
 		photolistview.setItems(obsPhoto);
-		
+
 	    if(!obsPhoto.isEmpty()) {
 	    		photolistview.getSelectionModel().select(0); //select first photo of album
 	    }
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Helper class that populates the Imageview based on the the results of the search results
 	 *
 	 */
 	private class Results extends ListCell<Photo>{
 		AnchorPane anchor = new AnchorPane();
 		StackPane stackpane = new StackPane();
-		
+
 		ImageView imageView = new ImageView();
-		
+
 		public Results() {
 			super();
-			
+
 			imageView.setFitWidth(100.0);
 			imageView.setFitHeight(100.0);
 			imageView.setPreserveRatio(true);
 
 			StackPane.setAlignment(imageView, Pos.TOP_LEFT);
-			stackpane.getChildren().add(imageView);			
+			stackpane.getChildren().add(imageView);
 			stackpane.setPrefHeight(110.0);
 			stackpane.setPrefWidth(90.0);
-			
+
 			AnchorPane.setLeftAnchor(stackpane, 0.0);
 			anchor.getChildren().addAll(stackpane);
 			anchor.setPrefHeight(110.0);
-			setGraphic(anchor);	
-			
+			setGraphic(anchor);
+
 		}
-		
+
 		@Override
 		public void updateItem(Photo photo, boolean empty) {
 			super.updateItem(photo, empty);
-			
+
 			setText(null);
 			if(photo == null)
-			{				
-				
+			{
+
 			}
-			
+
 			else{
 				Image img = new Image(photo.pic.toURI().toString());
 				imageView.setImage(img);
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * Creates an album for the current user from the search results
 	 * @param event
@@ -346,26 +295,26 @@ public class SearchController implements LogoutController {
 			   else {
 				   alert.close();
 			   }
-			return;		
-			
+			return;
+
 		}
 		Dialog<String> dialog = new Dialog<>();
 		   dialog.setTitle("Create a New Album from search results");
 		   dialog.setHeaderText("Name for album created from search results ");
 		   dialog.setResizable(true);
-		   
+
 		   Label albumnameLabel = new Label("Album Name: ");
 		   TextField albumnameTextField = new TextField();
-		   
+
 		   GridPane grid = new GridPane();
 		   grid.add(albumnameLabel, 1, 1);
 		   grid.add(albumnameTextField, 2, 1);
-		   
+
 		   dialog.getDialogPane().setContent(grid);
-		   
+
 		   ButtonType buttonTypeOk = new ButtonType("Add", ButtonData.OK_DONE);
 		   dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-		   
+
 		   dialog.setResultConverter(new Callback<ButtonType, String>() {
 			   @Override
 			   public String call(ButtonType b) {
@@ -385,27 +334,27 @@ public class SearchController implements LogoutController {
 						   }
 						   return null;
 					   }
-											   
+
 					   return albumnameTextField.getText().trim();
 				   }
 				   return null;
 			   }
-			
+
 		   });
-		   
+
 		   Optional<String> result = dialog.showAndWait();
-		   
+
 		   if (result.isPresent()) {
 			   Album albumFromSearch = new Album(result.get());
 			   Photos.photoLibraryUser.getCurrent().addAlbum(albumFromSearch);
 			   for(Photo photo : photolist) {
 				   albumFromSearch.addPhoto(photo);
 			   }
-			   
+
 		   }
-		
+
 	}
-	
+
 	/**
 	 * Redirects the user to the previous page
 	 * @param event
@@ -421,7 +370,7 @@ public class SearchController implements LogoutController {
 		appStage.setScene(adminScene);
 		appStage.show();
 	}
-	
+
 	/**
 	 * Logs the user out
 	 * @param event
@@ -430,6 +379,21 @@ public class SearchController implements LogoutController {
 	public void logOut(ActionEvent event) throws IOException{
 		logMeOut(event);
 //		System.out.println("Logged out from: Search");
+	}
+
+	/**
+	 * Displays an error dialog with a given title, header, and content
+	 *
+	 * @param title
+	 * @param header
+	 * @param content
+	 */
+	private void showErrorDialog(String title, String header, String content) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.showAndWait();
 	}
 
 
