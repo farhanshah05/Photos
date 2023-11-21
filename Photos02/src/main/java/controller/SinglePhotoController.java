@@ -35,13 +35,13 @@ import model.Tag;
 public class SinglePhotoController implements LogoutController {
 	@FXML
 	public ListView<String> listview;
-	
+
 	@FXML
 	public ImageView displayArea;
-	
+
 	@FXML
 	public Button mLogOff, mBack, mCaption, mAddTag, mRemoveTag;
-	
+
 	@FXML
 	public TextField tfCaption, tfTagName, tfTagValue;
 
@@ -49,27 +49,27 @@ public class SinglePhotoController implements LogoutController {
 	 * An instance of the admin that is created to help keep track of current values
 	 */
 	public static Superuser adminuser = Photos.photoLibraryUser;
-	
+
 	/**
 	 * Stores the instances of tags
 	 */
 	public static ArrayList<Tag> taglist = new ArrayList<>();
-	
+
 	/**
 	 * Stores the properties of a tag in a string format
 	 */
 	public static ArrayList<String> tagdisplay = new ArrayList<>();
-	
+
 	/**
 	 * Helps display a list of tags in a listview
 	 */
 	public ObservableList<String> obstag;
-	
+
 	/**
 	 * Current instance of photo
 	 */
 	public static Photo photo;
-	
+
 	/**
 	 * sets the title of the scene to current caption of the photo. As well as updates the current tag list.
 	 * @param app_stage
@@ -77,15 +77,15 @@ public class SinglePhotoController implements LogoutController {
 	public void start(Stage app_stage) {
 		//See if at current photo by caption
 		app_stage.setTitle(adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getCaption() + " ");
-		
+
 		//End changes
 		update();
 		if(!taglist.isEmpty()) {
-    		listview.getSelectionModel().select(0); //select first user
+			listview.getSelectionModel().select(0); //select first user
 		}
 	}
-	
-	
+
+
 	/**
 	 * Uses the text view to save captions
 	 * @param event
@@ -105,7 +105,7 @@ public class SinglePhotoController implements LogoutController {
 			return;
 		}
 	}
-	
+
 	public void addTag(ActionEvent event) throws IOException {
 		String tagName = tfTagName.getText().trim();
 		String tagValue = tfTagValue.getText().trim();
@@ -122,22 +122,22 @@ public class SinglePhotoController implements LogoutController {
 			update();
 			Superuser.save(adminuser);
 		}
-		
+
 	}
-	
+
 	public void removeTag(ActionEvent event) throws IOException{
 		int index = listview.getSelectionModel().getSelectedIndex();
-		
+
 		ArrayList<Tag> taglist = adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList();
 		adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().removeTag(taglist.get(index).name, taglist.get(index).value);
-		
+
 		update();
 		Superuser.save(adminuser);
-		
-	}
-	
 
-	
+	}
+
+
+
 	public void update() {
 		File file;
 		if (photo != null) {
@@ -145,10 +145,10 @@ public class SinglePhotoController implements LogoutController {
 			Image image = new Image(file.toURI().toString());
 			displayArea.setImage(image);
 		}
-		
+
 		tagdisplay.clear();
 		ArrayList<Tag> tags = adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList();
-		
+
 		for(Tag tag : tags) {
 			tagdisplay.add("Name: " + tag.name +    " | Value: " + tag.value);
 		}
@@ -158,22 +158,22 @@ public class SinglePhotoController implements LogoutController {
 		tfTagName.clear();
 		tfTagValue.clear();
 	}
-	
-
-	
 
 
-	
+
+
+
+
 //	public void update() {
 //		tfCaption.setText(photo.getCaption());
-//		
+//
 //		File file;
 //		if (photo != null) {
 //			file = photo.getPic();
 //			Image image = new Image(file.toURI().toString());
 //			displayArea.setImage(image);
 //		}
-//		
+//
 //		taglist.clear();
 //		for (int i = 0; i < photo.getTagList().size(); i++) {
 //			taglist.add(photo.getTagList().get(i));
@@ -182,8 +182,8 @@ public class SinglePhotoController implements LogoutController {
 //		observableList = FXCollections.observableArrayList(taglist);
 //		listview.setItems(observableList);
 //		listview.refresh();
-//	} 
-	
+//	}
+
 	public void back(ActionEvent event) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
@@ -194,10 +194,10 @@ public class SinglePhotoController implements LogoutController {
 		appStage.setScene(adminScene);
 		appStage.show();
 	}
-	
+
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
 //		System.out.println("Logged Out");
 	}
-	
+
 }

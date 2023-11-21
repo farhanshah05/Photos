@@ -88,7 +88,7 @@ public class UserController implements LogoutController {
 
 		app_stage.setTitle(adminuser.getCurrent().getUsername() + "'s" + " Photo Albums");
 		if(!albumlist.isEmpty()) {
-    		listview.getSelectionModel().select(0); //select first user
+			listview.getSelectionModel().select(0); //select first user
 		}
 
 		// Listen for selection changes
@@ -285,13 +285,13 @@ public class UserController implements LogoutController {
 		int albumindex = listview.getSelectionModel().getSelectedIndex();
 		int currentuserindex = adminuser.getUserIndex();
 		if(adminuser.getUsers().get(currentuserindex).getAlbums().size() == 0) {
-		      Alert alert = new Alert(AlertType.ERROR);
-		      alert.setTitle("Empty Deletion");
-		      alert.setHeaderText(null);
-		      alert.setContentText("Cannot delete something that isn't there");
-		      alert.showAndWait();
-		      return;
-		    }
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Empty Deletion");
+			alert.setHeaderText(null);
+			alert.setContentText("Cannot delete something that isn't there");
+			alert.showAndWait();
+			return;
+		}
 		Album album = adminuser.getUsers().get(currentuserindex).getAlbums().get(albumindex);
 
 		adminuser.getUsers().get(currentuserindex).setCurrentAlbum(album);
@@ -326,8 +326,8 @@ public class UserController implements LogoutController {
 
 			if (user.getAlbums().size() == 0) {
 				mDeleteAlbum.setVisible(false);
-		    } else {
-		    	int lastuserindex = user.getAlbums().size();
+			} else {
+				int lastuserindex = user.getAlbums().size();
 				if (user.getAlbums().size() == 1) {
 					listview.getSelectionModel().select(0);
 				} else if (index == lastuserindex) {
