@@ -27,7 +27,13 @@ import javafx.scene.control.Alert.AlertType;
 import model.Album;
 import model.Superuser;
 import model.User;
-
+/**
+ * UserController controls user actions related to photo albums.
+ * It manages album display, sorting, addition, renaming, deletion,
+ * and navigation to the search and photo view pages.
+ *
+ * @author Farhan Shah
+ */
 public class UserController implements LogoutController {
 
 	@FXML

@@ -18,6 +18,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Photo;
 
+/**
+ * SlideshowController manages the display and navigation of a photo slideshow.
+ * It allows users to navigate forward and backward through photos, go back to a
+ * previous page, and log out. The controller updates the displayed image and
+ * status text based on the current photo index in the album.
+ *
+ * @author Farhan Shah
+ */
 public class SlideshowController implements LogoutController {
 
 	@FXML

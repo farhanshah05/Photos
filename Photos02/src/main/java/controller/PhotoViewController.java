@@ -30,9 +30,13 @@ import model.Superuser;
 import model.User;
 
 /**
+ * PhotoViewController manages the display and interaction with a user's photo album.
+ * It allows users to view, add, delete, copy, move, and display photos, as well as
+ * perform actions like searching and starting a manual photo slideshow. The controller
+ * updates the displayed photos, allows photo management actions, and redirects the
+ * user to other pages as needed.
  *
  * @author Farhan Shah
- *
  */
 public class PhotoViewController implements LogoutController {
 	@FXML
