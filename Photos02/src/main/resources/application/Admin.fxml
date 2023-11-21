@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -30,21 +31,28 @@
 
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="3">
             <children>
-                <Button fx:id="mCreate" layoutX="31.0" layoutY="304.0" mnemonicParsing="false" onAction="#addUser" text="Create User" />
-                <Button fx:id="mDelete" layoutX="172.0" layoutY="304.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete User" />
+                <Button fx:id="mCreate" layoutX="31.0" layoutY="304.0" mnemonicParsing="false" onAction="#addUser" style="-fx-background-color: green;" text="Create User" />
+                <Button fx:id="mDelete" layoutX="172.0" layoutY="304.0" mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: red;" text="Delete User" />
                 <TextField fx:id="tfUsername" layoutX="33.0" layoutY="251.0" prefHeight="25.0" prefWidth="219.0" />
-                <Label layoutX="107.0" layoutY="233.0" text="Username:">
+                <Label layoutX="105.0" layoutY="214.0" text="Username:">
                     <font>
-                        <Font size="14.0" />
+                        <Font name="AppleGothic Regular" size="14.0" />
                     </font>
                 </Label>
-                <Button fx:id="mLogOff" layoutX="218.0" layoutY="1.0" mnemonicParsing="false" onAction="#logOut" text="Log Off" />
+                <Button fx:id="mLogOff" layoutX="218.0" layoutY="1.0" mnemonicParsing="false" onAction="#logOut" text="Log Off" style="-fx-background-color: #FF5252; -fx-text-fill: white;"/>
                 <Text layoutX="56.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Admin" textAlignment="CENTER">
                     <font>
                         <Font name="System Font" size="34.0" />
                     </font>
+                    <fill>
+                        <Color red="0.88" green="0.54" blue="0.27" fx:id="fx_color_2" />
+                    </fill>
                 </Text>
-                <Text layoutX="50.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Users Are Listed on the Left" />
+                <Text layoutX="50.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Users Are Listed on The Left">
+                    <fill>
+                        <Color red="0.88" green="0.54" blue="0.27" fx:id="fx_color_3" />
+                    </fill>
+                </Text>
             </children>
         </AnchorPane>
     </children>
