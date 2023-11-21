@@ -74,8 +74,7 @@ public class SearchController implements LogoutController {
 	 * On start this method kicks off
 	 */
 	public void start() {
-//		System.out.println("At start");
-		
+
 	}
 	
 	/**
@@ -121,7 +120,6 @@ public class SearchController implements LogoutController {
 			showErrorDialog("Empty List!", "Please add tags to the list", "List of tags is empty!");
 			return;
 		}
-//		System.out.println("Or search");
 		mAllSearch.setVisible(false);
 		mAllSearch.setDisable(true);
 		mSearchDate.setVisible(false);
@@ -155,7 +153,6 @@ public class SearchController implements LogoutController {
 			}
 			return;
 		}
-//		System.out.println("And search");
 		mAnySearch.setVisible(false);
 		mAnySearch.setDisable(true);
 		mSearchDate.setVisible(false);
@@ -378,7 +375,6 @@ public class SearchController implements LogoutController {
 	 */
 	public void logOut(ActionEvent event) throws IOException{
 		logMeOut(event);
-//		System.out.println("Logged out from: Search");
 	}
 
 	/**
