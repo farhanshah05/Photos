@@ -28,11 +28,13 @@ import model.Superuser;
 import model.Tag;
 
 /**
- * This class controls the view/ functions of a single image
- * @author Farhan Shah
+ * This class controls the view/functions of a single image
  *
+ * @author Farhan Shah
  */
 public class SinglePhotoController implements LogoutController {
+
+	// FXML elements
 	@FXML
 	public ListView<String> listview;
 
@@ -45,52 +47,29 @@ public class SinglePhotoController implements LogoutController {
 	@FXML
 	public TextField tfCaption, tfTagName, tfTagValue;
 
-	/**
-	 * An instance of the admin that is created to help keep track of current values
-	 */
+	// Reference to the main user of the application
 	public static Superuser adminuser = Photos.photoLibraryUser;
 
-	/**
-	 * Stores the instances of tags
-	 */
+	// Lists to store tags and their display properties
 	public static ArrayList<Tag> taglist = new ArrayList<>();
-
-	/**
-	 * Stores the properties of a tag in a string format
-	 */
 	public static ArrayList<String> tagdisplay = new ArrayList<>();
 
-	/**
-	 * Helps display a list of tags in a listview
-	 */
+	// ObservableList for displaying tags in the ListView
 	public ObservableList<String> obstag;
 
-	/**
-	 * Current instance of photo
-	 */
+	// Current instance of the displayed photo
 	public static Photo photo;
 
-	/**
-	 * sets the title of the scene to current caption of the photo. As well as updates the current tag list.
-	 * @param app_stage
-	 */
+	// Method called on scene start
 	public void start(Stage app_stage) {
-		//See if at current photo by caption
 		app_stage.setTitle(adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getCaption() + " ");
-
-		//End changes
 		update();
-		if(!taglist.isEmpty()) {
-			listview.getSelectionModel().select(0); //select first user
+		if (!taglist.isEmpty()) {
+			listview.getSelectionModel().select(0); // select first user
 		}
 	}
 
-
-	/**
-	 * Uses the text view to save captions
-	 * @param event
-	 * @throws IOException
-	 */
+	// Method to save the edited caption
 	public void saveCaption(ActionEvent event) throws IOException {
 		String caption = tfCaption.getText().trim();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -106,38 +85,35 @@ public class SinglePhotoController implements LogoutController {
 		}
 	}
 
+	// Method to add a new tag to the photo
 	public void addTag(ActionEvent event) throws IOException {
 		String tagName = tfTagName.getText().trim();
 		String tagValue = tfTagValue.getText().trim();
 		if (tagName.isEmpty() || tagValue.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Tag Add Error");
-			alert.setContentText("Tag Infomration Incomplete.");
+			alert.setContentText("Tag Information Incomplete.");
 			alert.showAndWait();
 			return;
 		} else {
 			Tag tag = new Tag(tagName, tagValue);
 			adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().addTag(tag.name, tag.value);
-//			System.out.println(adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList());
 			update();
 			Superuser.save(adminuser);
 		}
-
 	}
 
-	public void removeTag(ActionEvent event) throws IOException{
+	// Method to remove a tag from the photo
+	public void removeTag(ActionEvent event) throws IOException {
 		int index = listview.getSelectionModel().getSelectedIndex();
-
 		ArrayList<Tag> taglist = adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList();
-		adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().removeTag(taglist.get(index).name, taglist.get(index).value);
-
+		adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().removeTag(taglist.get(index).name,
+				taglist.get(index).value);
 		update();
 		Superuser.save(adminuser);
-
 	}
 
-
-
+	// Method to update the display of the photo and tags
 	public void update() {
 		File file;
 		if (photo != null) {
@@ -146,44 +122,20 @@ public class SinglePhotoController implements LogoutController {
 			displayArea.setImage(image);
 		}
 
+		// Update the list of tags for display
 		tagdisplay.clear();
 		ArrayList<Tag> tags = adminuser.getCurrent().getCurrentAlbum().getCurrentPhoto().getTagList();
 
-		for(Tag tag : tags) {
-			tagdisplay.add("Name: " + tag.name +    " | Value: " + tag.value);
+		for (Tag tag : tags) {
+			tagdisplay.add("Name: " + tag.name + " | Value: " + tag.value);
 		}
 		obstag = FXCollections.observableArrayList(tagdisplay);
 		listview.setItems(obstag);
-//		System.out.println(taglist.toString());
 		tfTagName.clear();
 		tfTagValue.clear();
 	}
 
-
-
-
-
-
-//	public void update() {
-//		tfCaption.setText(photo.getCaption());
-//
-//		File file;
-//		if (photo != null) {
-//			file = photo.getPic();
-//			Image image = new Image(file.toURI().toString());
-//			displayArea.setImage(image);
-//		}
-//
-//		taglist.clear();
-//		for (int i = 0; i < photo.getTagList().size(); i++) {
-//			taglist.add(photo.getTagList().get(i));
-//		}
-//
-//		observableList = FXCollections.observableArrayList(taglist);
-//		listview.setItems(observableList);
-//		listview.refresh();
-//	}
-
+	// Method to navigate back to the photo view
 	public void back(ActionEvent event) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/PhotoView.fxml"));
 		Parent sceneManager = (Parent) fxmlLoader.load();
@@ -195,9 +147,8 @@ public class SinglePhotoController implements LogoutController {
 		appStage.show();
 	}
 
+	// Method to log out the user
 	public void logOut(ActionEvent event) throws IOException {
 		logMeOut(event);
-//		System.out.println("Logged Out");
 	}
-
 }

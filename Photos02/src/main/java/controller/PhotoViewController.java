@@ -30,64 +30,64 @@ import model.Superuser;
 import model.User;
 
 /**
- * 
+ *
  * @author Farhan Shah
  *
  */
 public class PhotoViewController implements LogoutController {
 	@FXML
 	public ListView<Photo> listview;
-	
+
 	@FXML
 	public ImageView displayArea;
 	private Image image;
-	
+
 	@FXML
 	public Button mLogOff, mBack, mAdd, mDelete, mSlideshow, mSearch, mDisplay, mCopy, mMove;
-	
+
 	@FXML
 	public TextField tfCopy, tfMove;
-	
-	@FXML 
+
+	@FXML
 	public Text tCaption, tDate;
 
 	/**
 	 * ArrayList that stores the instance of a photo
 	 */
 	public static ArrayList<Photo> photolist = new ArrayList<>();
-	
+
 	/**
 	 * An observable list that helps display the list of photos
 	 */
-	public ObservableList<Photo> observableList;	
-	
+	public ObservableList<Photo> observableList;
+
 	/**
 	 * A Superuser instance that helps maintain the state of the program
 	 */
 	public static Superuser adminuser = Photos.photoLibraryUser;
-	
+
 	/**
 	 * A User object that maintains current user
 	 */
 	public static User user;
-	
+
 	/**
 	 * An album list that helps with moving an copying albums
 	 */
 	public static ArrayList<Album> albumlist;
-	
+
 	/**
 	 * Used to store the albums of a user
 	 */
-	public static Album album; 
-	
+	public static Album album;
+
 	/**
 	 * On scene start it refreshes the the list of photos in the photo listview as well as thumbnails
 	 * @param app_stage
 	 * Takes in the previous Stage to help keep track of current albums
 	 */
 	public void start(Stage app_stage) {
-		
+
 		app_stage.setTitle(adminuser.getCurrent().getCurrentAlbum().getAlbumName() + " Album Page");
 		displayArea.setFitHeight(100);
 		displayArea.setFitWidth(100);
@@ -98,9 +98,9 @@ public class PhotoViewController implements LogoutController {
 			mDelete.setVisible(false);
 		}
 		if(!photolist.isEmpty()) {
-    		listview.getSelectionModel().select(0); //select first user
+			listview.getSelectionModel().select(0); //select first user
 		}
-		
+
 		if (photolist.size() > 0) {
 			tCaption.setText("Caption: " + photolist.get(0).caption);
 			tDate.setText("Date: " + photolist.get(0).date);
@@ -111,7 +111,7 @@ public class PhotoViewController implements LogoutController {
 			updateCaption();
 		});
 	}
-	
+
 	/**
 	 * Moves a photo from one album to another album
 	 * @throws IOException
@@ -136,12 +136,12 @@ public class PhotoViewController implements LogoutController {
 			alert.setContentText("Are you sure you want to move this photo to " + moveAlbum + "?");
 
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK) { 
+			if (result.get() == ButtonType.OK) {
 				Album newAlbum = albumlist.get(albumIndex);
 				Photo photo = listview.getSelectionModel().getSelectedItem();
 				newAlbum.addPhoto(photo);
 				album.deletePhoto(listview.getSelectionModel().getSelectedIndex());
-				
+
 				newAlbum.save(newAlbum);
 				album.save(album);
 				update();
@@ -164,7 +164,7 @@ public class PhotoViewController implements LogoutController {
 		}
 //		System.out.println("move");
 	}
-	
+
 	/**
 	 * Copy's a photo into another album
 	 * @throws IOException
@@ -189,11 +189,11 @@ public class PhotoViewController implements LogoutController {
 			alert.setContentText("Are you sure you want to copy this photo to " + copyAlbum + "?");
 
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK) { 
+			if (result.get() == ButtonType.OK) {
 				Album newAlbum = albumlist.get(albumIndex);
 				Photo photo = listview.getSelectionModel().getSelectedItem();
 				newAlbum.addPhoto(photo);
-				
+
 				newAlbum.save(newAlbum);
 			} else {
 				return;
@@ -214,7 +214,7 @@ public class PhotoViewController implements LogoutController {
 		}
 //		System.out.println("move");
 	}
-	
+
 	/**
 	 * Displays a small image of the current photo in the form of an image view
 	 */
@@ -222,7 +222,7 @@ public class PhotoViewController implements LogoutController {
 		Photo photo = listview.getSelectionModel().getSelectedItem();
 		File file;
 		if (photo != null) {
-			
+
 			//Changes here ======================================================
 			file = photo.getPic();
 			if(adminuser.getCurrent().getUsername().equals("stock") && photo.isStock) {
@@ -235,13 +235,13 @@ public class PhotoViewController implements LogoutController {
 			}else {
 				Image image = new Image(file.toURI().toString());
 				displayArea.setImage(image);
-			}	 
+			}
 		} else {
 			displayArea.setImage(null);
 		}
 		return;
 	}
-	
+
 	/**
 	 * Allows the user to update the caption of a photo
 	 */
@@ -277,32 +277,32 @@ public class PhotoViewController implements LogoutController {
 		}*/ else {
 
 
-				String filepath = imgfile.getAbsolutePath();
-				Photo newPhoto;
-				if(adminuser.getCurrent().getUsername().equals("stock")) {
-					int index;
-					if (filepath.contains("stockphotos")) {
-						index = filepath.indexOf("stockphotos");
-						String newfilepath = filepath.substring(index,filepath.length());
-						Photo newPhoto2 = new Photo(imgfile, newfilepath);
-						newPhoto2.isStock = true;
-						album.addPhoto(newPhoto2);
-					} else {
-						newPhoto = new Photo(imgfile, filepath);
-						album.addPhoto(newPhoto);
-					}
+			String filepath = imgfile.getAbsolutePath();
+			Photo newPhoto;
+			if(adminuser.getCurrent().getUsername().equals("stock")) {
+				int index;
+				if (filepath.contains("stockphotos")) {
+					index = filepath.indexOf("stockphotos");
+					String newfilepath = filepath.substring(index,filepath.length());
+					Photo newPhoto2 = new Photo(imgfile, newfilepath);
+					newPhoto2.isStock = true;
+					album.addPhoto(newPhoto2);
 				} else {
 					newPhoto = new Photo(imgfile, filepath);
 					album.addPhoto(newPhoto);
 				}
-				update();
+			} else {
+				newPhoto = new Photo(imgfile, filepath);
+				album.addPhoto(newPhoto);
+			}
+			update();
 
 		}
 		if(adminuser.getCurrent().getCurrentAlbum().getPhotos().size() > 0) {
 			mDelete.setVisible(true);
 		}
 		if(!photolist.isEmpty()) {
-    		listview.getSelectionModel().select(0);
+			listview.getSelectionModel().select(0);
 		}
 
 		Album.save(album);
@@ -325,27 +325,27 @@ public class PhotoViewController implements LogoutController {
 		if (result.get() == ButtonType.OK) {
 			album.deletePhoto(index);
 			update();
-			   
+
 			if (adminuser.getCurrent().getCurrentAlbum().getPhotos().size() == 0) {
 				mDelete.setVisible(false);
-		    }else {  
-		    	int lastuserindex = album.getPhotos().size();
+			}else {
+				int lastuserindex = album.getPhotos().size();
 				if (album.getPhotos().size() == 1) {
 					listview.getSelectionModel().select(0);
 				} else if (index == lastuserindex) {
 					listview.getSelectionModel().select(lastuserindex-1);
-				} else { 
+				} else {
 					listview.getSelectionModel().select(index);
 				}
 			}
-			
+
 			Album.save(album);
 		} else {
 			return;
 		}
 		return;
 	}
-	
+
 	/**
 	 * Updates the listview of photo's on add or delete photo action
 	 */
@@ -359,7 +359,7 @@ public class PhotoViewController implements LogoutController {
 		listview.setItems(observableList);
 		listview.refresh();
 	}
-	
+
 	/**
 	 * Redirects the user to a search page
 	 * @param event
@@ -373,9 +373,9 @@ public class PhotoViewController implements LogoutController {
 		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		searchController.start();
 		appStage.setScene(adminScene);
-		appStage.show();	
+		appStage.show();
 	}
-	
+
 	/**
 	 * Enlarges the photo in a different view.
 	 * Also displays properties of a photo
@@ -391,14 +391,14 @@ public class PhotoViewController implements LogoutController {
 					checked = true;
 				}
 			}
-			
+
 			if (checked) {
 				//Changed
 				int photoindex = listview.getSelectionModel().getSelectedIndex();
 				Photo currentphoto = adminuser.getCurrent().getCurrentAlbum().getPhotos().get(photoindex);
 				adminuser.getCurrent().getCurrentAlbum().setCurrentPhoto(currentphoto);
 				//End Changed
-				
+
 				SinglePhotoController.photo = listview.getSelectionModel().getSelectedItem();
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/application/SinglePhoto.fxml"));
 				Parent sceneManager = (Parent) fxmlLoader.load();
@@ -407,12 +407,12 @@ public class PhotoViewController implements LogoutController {
 				Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				singlePhotoController.start(appStage);
 				appStage.setScene(adminScene);
-				appStage.show();	
+				appStage.show();
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Displays an albums photos in a manual slideshow
 	 * @param event
@@ -440,11 +440,11 @@ public class PhotoViewController implements LogoutController {
 			Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 			slideshowController.start();
 			appStage.setScene(adminScene);
-			appStage.show();		
+			appStage.show();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Redirects the user to the previous page: the Album page
 	 * @param event
@@ -460,7 +460,7 @@ public class PhotoViewController implements LogoutController {
 		appStage.setScene(adminScene);
 		appStage.show();
 	}
-	
+
 	/**
 	 * Logs the user out and returns the user to the login page
 	 * @param event
