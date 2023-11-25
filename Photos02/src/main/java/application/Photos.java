@@ -10,6 +10,7 @@ import model.Superuser;
 
 /**
  * The main class for the Photo Library application.
+ * VCS Transfer
  * Author: @Farhan Shah
  */
 public class Photos extends Application {
